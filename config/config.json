@@ -1,6 +1,7 @@
 {
     "InputDirectory": "C:\\Users\\schum\\Dropbox\\MusicDesign\\MuseScore\\Arrangements",
-    "OutputDirectory": "C:\\Users\\schum\\Dropbox\\MusicDesign\\MuseScore\\Arrangements",
+    "OutputDirectory": "C:\\Users\\schum\\Dropbox\\MusicDesign\\MuseScore\\Arrangements\\output",
+    "VersionDatabase": "C:\\Users\\schum\\Dropbox\\MusicDesign\\MuseScore\\Arrangements\\version_database.json",
     "MuseScoreInstallDirectory": "C:\\Program Files\\MuseScore 3\\bin\\MuseScore3.exe",
     "ExportFormats": ["mp3", "midi", "pdf"]
 }

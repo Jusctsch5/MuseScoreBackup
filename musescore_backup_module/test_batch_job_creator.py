@@ -2,7 +2,6 @@ from .configuration_decoder import ConfigurationDecoder
 from .musescore_batch_job_creator import MusescoreBatchJobCreator
 from .musescore_interface import MusescoreInterface
 
-import unittest
 import pathlib
 
 
