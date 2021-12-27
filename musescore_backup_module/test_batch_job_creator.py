@@ -10,7 +10,7 @@ def test_batch_job():
     configuration = configuration_decoder.decode_configuration(
         str(pathlib.Path("musescore_backup_module", "test", "test_config.json")))
 
-    creator = MusescoreBatchJobCreator()
+    creator = MusescoreBatchJobCreator(None)
 
     batch_job = creator.create_batch_from_directory(configuration.decoded_object.InputDirectory,
                                                     configuration.decoded_object.OutputDirectory,

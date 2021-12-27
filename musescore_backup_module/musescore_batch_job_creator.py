@@ -1,28 +1,19 @@
 import json
 import pathlib
-import datetime
-import uuid
 
 
 class MusescoreBatchJob:
-    def __init__(self, output_file_dir_list, export_formats, content, output_dir, batch_file_dir):
+    def __init__(self, output_file_dir_list, export_formats, content, output_dir):
         self.output_file_dir_list = output_file_dir_list
         self.export_formats = export_formats
         self.content = content
 
-        now = datetime.datetime.now()
-
-        self.filename = "Batch_" + \
-            str(now.year) + "_" + \
-            str(now.month) + "_" + \
-            str(now.day) + "_" + \
-            str(uuid.uuid4())[0:8] + \
-            ".json"
+        self.filename = "batch.json"
 
         self.output_dir = output_dir
-        self.batch_output_dir = batch_file_dir
+        self.batch_output_dir = output_dir
         self.batch_filepath = str(pathlib.Path(
-            batch_file_dir, self.filename))
+            output_dir, self.filename))
 
     def __create_file(self):
         output_path = pathlib.Path(self.batch_output_dir)
@@ -63,6 +54,9 @@ class MusescoreBatchJob:
 
 class MusescoreBatchJobCreator:
 
+    def __init__(self, hash_database):
+        self.hash_database
+
     def create_batch_from_file_list(self, files, input_dir, output_dir, export_formats):
         batch_job_json = []
         output_file_dir_list = []
@@ -88,7 +82,7 @@ class MusescoreBatchJobCreator:
 
         jsonString = json.dumps(batch_job_json, indent=4)
         job = MusescoreBatchJob(output_file_dir_list,
-                                export_formats, jsonString, output_dir, "batch_jobs")
+                                export_formats, jsonString, output_dir)
         return job
 
     def create_batch_from_directory(self, input_dir, output_dir, export_formats):

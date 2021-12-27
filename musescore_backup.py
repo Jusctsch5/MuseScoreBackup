@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 from musescore_backup_module.configuration_decoder import ConfigurationDecoder
+from musescore_backup_module.musescore_hash_database import MusescoreHashDatabase
 from musescore_backup_module.musescore_interface import MusescoreInterface
 from musescore_backup_module.musescore_batch_job_creator import MusescoreBatchJobCreator
 
@@ -20,7 +21,13 @@ if __name__ == '__main__':
     configuration = configuration_decoder.decode_configuration(
         args.configuration)
 
-    creator = MusescoreBatchJobCreator()
+    database = MusescoreHashDatabase(
+        configuration.decoded_object.HashDatabase)
+
+    database.initialize_hash_database(
+        configuration.decoded_object.InputDirectory)
+
+    creator = MusescoreBatchJobCreator(database)
 
     batch_job = creator.create_batch_from_directory(configuration.decoded_object.InputDirectory,
                                                     configuration.decoded_object.OutputDirectory,
