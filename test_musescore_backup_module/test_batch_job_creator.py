@@ -1,7 +1,7 @@
 from musescore_backup_module.musescore_hash_database import MusescoreHashDatabase
-from .configuration_decoder import ConfigurationDecoder
-from .musescore_batch_job_creator import MusescoreBatchJobCreator
-from .musescore_interface import MusescoreReal
+from musescore_backup_module.configuration_decoder import ConfigurationDecoder
+from musescore_backup_module.musescore_batch_job_creator import MusescoreBatchJobCreator
+from musescore_backup_module.musescore_interface import MusescoreReal
 
 import pathlib
 
@@ -9,7 +9,7 @@ import pathlib
 def test_batch_job():
     configuration_decoder = ConfigurationDecoder()
     configuration = configuration_decoder.decode_configuration(
-        pathlib.Path("musescore_backup_module", "test", "test1", "test_config.json"))
+        pathlib.Path("test_musescore_backup_module", "test1", "test_config.json"))
 
     creator = MusescoreBatchJobCreator()
 
@@ -26,7 +26,7 @@ def test_batch_job():
 def test_batch_job_hash():
     configuration_decoder = ConfigurationDecoder()
     configuration = configuration_decoder.decode_configuration(
-        pathlib.Path("musescore_backup_module", "test", "test1", "test_hash_config.json"))
+        pathlib.Path("test_musescore_backup_module", "test1", "test_hash_config.json"))
 
     database = MusescoreHashDatabase(
         configuration.decoded_object.HashDatabase)

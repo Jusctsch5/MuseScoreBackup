@@ -28,6 +28,8 @@ class MusescoreHashDatabase:
             hash_database_entry['hash'] = hash
             hash_database.append(hash_database_entry)
 
+        print("Entries Hashed: " + str(len(file_paths)))
+
         return hash_database
 
     def clear_hash_database(self):

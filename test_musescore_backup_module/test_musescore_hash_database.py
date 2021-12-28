@@ -1,5 +1,5 @@
-from .configuration_decoder import ConfigurationDecoder
-from .musescore_hash_database import MusescoreHashDatabase
+from musescore_backup_module.configuration_decoder import ConfigurationDecoder
+from musescore_backup_module.musescore_hash_database import MusescoreHashDatabase
 
 import pathlib
 
@@ -7,7 +7,7 @@ import pathlib
 def test_musescore_hash_database():
     configuration_decoder = ConfigurationDecoder()
     configuration = configuration_decoder.decode_configuration(
-        pathlib.Path("musescore_backup_module", "test", "test1", "test_hash_config.json"))
+        pathlib.Path("test_musescore_backup_module", "test1", "test_hash_config.json"))
 
     database = MusescoreHashDatabase(
         configuration.decoded_object.HashDatabase)
@@ -17,10 +17,19 @@ def test_musescore_hash_database():
     database.initialize_hash_database(
         configuration.decoded_object.InputDirectory)
 
+    assert(database.previous_hash_content != database.current_hash_content)
+
+    # Simulate generation of files, which should update the cache
+    # then relaunch and verify nothing needs to be generated
+    database.update_hash_database()
+    database.initialize_hash_database(
+        configuration.decoded_object.InputDirectory)
     assert(database.previous_hash_content == database.current_hash_content)
 
+    # Cache is updated
+    # now add a new file, and make sure it needs to be modified
     configuration = configuration_decoder.decode_configuration(
-        pathlib.Path("musescore_backup_module", "test", "test2", "test_hash_config.json"))
+        pathlib.Path("test_musescore_backup_module", "test2", "test_hash_config.json"))
 
     database.initialize_hash_database(
         configuration.decoded_object.InputDirectory)

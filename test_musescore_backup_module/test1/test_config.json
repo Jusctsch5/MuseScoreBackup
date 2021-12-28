@@ -1,7 +1,6 @@
 {
-    "InputDirectory": ".",
+    "InputDirectory": ".\\test_musescore_backup_module\\test1",
     "OutputDirectory": "output",
-    "HashDatabase": "output\\version_database.json",
     "MuseScoreInstallDirectory": "C:\\Program Files\\MuseScore 3\\bin\\MuseScore3.exe"
 }
 
