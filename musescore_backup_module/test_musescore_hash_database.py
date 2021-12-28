@@ -7,7 +7,7 @@ import pathlib
 def test_musescore_hash_database():
     configuration_decoder = ConfigurationDecoder()
     configuration = configuration_decoder.decode_configuration(
-        str(pathlib.Path("musescore_backup_module", "test", "test_hash_config.json")))
+        pathlib.Path("musescore_backup_module", "test", "test1", "test_hash_config.json"))
 
     database = MusescoreHashDatabase(
         configuration.decoded_object.HashDatabase)
@@ -20,11 +20,15 @@ def test_musescore_hash_database():
     assert(database.previous_hash_content == database.current_hash_content)
 
     configuration = configuration_decoder.decode_configuration(
-        str(pathlib.Path("musescore_backup_module", "test", "test1", "test_hash_config.json")))
+        pathlib.Path("musescore_backup_module", "test", "test2", "test_hash_config.json"))
 
     database.initialize_hash_database(
         configuration.decoded_object.InputDirectory)
 
-    assert(database.previous_hash_content != database.current_hash_content)
+    print(database.previous_hash_content)
+    print(database.current_hash_content)
 
-    print(str(database.get_hash_diff_list()))
+    assert(database.previous_hash_content != database.current_hash_content)
+    print("previous:" + str(database.previous_hash_content))
+    print("current:" + str(database.current_hash_content))
+    print("diff:" + str(database.get_hash_diff_list()))

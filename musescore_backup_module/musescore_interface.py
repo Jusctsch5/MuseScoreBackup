@@ -1,8 +1,26 @@
+from abc import ABC, abstractmethod
 import subprocess
 from datetime import datetime
+import pathlib
 
 
-class MusescoreInterface:
+class MusescoreInterface(ABC):
+    @abstractmethod
+    def process_batch(self, batch_job):
+        pass
+
+
+class MusescoreFake(MusescoreInterface):
+    def __init__(self):
+        pass
+
+    def process_batch(self, batch_job):
+        for file in batch_job:
+            for output in file['out']:
+                pathlib.Path(output).touch()
+
+
+class MusescoreReal(MusescoreInterface):
 
     def __init__(self, musescore_binary):
         self.musescore_binary = musescore_binary

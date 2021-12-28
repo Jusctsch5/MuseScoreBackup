@@ -2,8 +2,9 @@
 import argparse
 from musescore_backup_module.configuration_decoder import ConfigurationDecoder
 from musescore_backup_module.musescore_hash_database import MusescoreHashDatabase
-from musescore_backup_module.musescore_interface import MusescoreInterface
+from musescore_backup_module.musescore_interface import MusescoreReal
 from musescore_backup_module.musescore_batch_job_creator import MusescoreBatchJobCreator
+from pathlib import Path
 
 if __name__ == '__main__':
 
@@ -19,7 +20,7 @@ if __name__ == '__main__':
 
     configuration_decoder = ConfigurationDecoder()
     configuration = configuration_decoder.decode_configuration(
-        args.configuration)
+        Path(args.configuration))
 
     database = MusescoreHashDatabase(
         configuration.decoded_object.HashDatabase)
@@ -33,6 +34,6 @@ if __name__ == '__main__':
                                                     configuration.decoded_object.OutputDirectory,
                                                     configuration.decoded_object.ExportFormats)
 
-    interface = MusescoreInterface(
+    interface = MusescoreReal(
         configuration.decoded_object.MuseScoreInstallDirectory)
     batch_job.process(interface)

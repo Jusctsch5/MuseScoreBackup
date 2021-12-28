@@ -1,5 +1,6 @@
 import json
 import pathlib
+from typing import List
 
 
 class MusescoreBatchJob:
@@ -54,21 +55,22 @@ class MusescoreBatchJob:
 
 class MusescoreBatchJobCreator:
 
-    def __init__(self, hash_database):
-        self.hash_database
+    def create_batch_from_file_list(self, files: List[str], input_dir: str, output_dir: str, export_formats) -> MusescoreBatchJob:
 
-    def create_batch_from_file_list(self, files, input_dir, output_dir, export_formats):
-        batch_job_json = []
-        output_file_dir_list = []
+        if len(files) == 0:
+            print("Input files length of 0")
+            return None
 
         p = pathlib.Path(input_dir)
 
-        for file_path in files:
+        batch_job_json = []
+        output_file_dir_list = []
+        for filename in files:
             batch = {}
 
-            batch['in'] = str(file_path)
+            batch['in'] = filename
 
-            output_filepath = file_path.relative_to(p)
+            output_filepath = pathlib.Path(filename).relative_to(p)
             output_file_dir_list.append(output_filepath.parent)
 
             batch['out'] = []
@@ -89,6 +91,11 @@ class MusescoreBatchJobCreator:
 
         print("Scanning directory for file_paths: " + input_dir)
         p = pathlib.Path(input_dir)
-        file_paths = list(p.rglob('*.mscz'))
+        file_paths = list(str(p.rglob('*.mscz')))
+
+        return self.create_batch_from_file_list(file_paths, input_dir, output_dir, export_formats)
+
+    def create_batch_from_hash_database(self, hash_db, input_dir, output_dir, export_formats):
+        file_paths = hash_db.get_hash_diff_list()
 
         return self.create_batch_from_file_list(file_paths, input_dir, output_dir, export_formats)
