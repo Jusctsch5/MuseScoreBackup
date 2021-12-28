@@ -27,6 +27,10 @@ class MusescoreBatchJob:
     def process(self, musescore_interface):
         self.__create_file()
 
+        if self.output_file_dir_list is None or len(self.output_file_dir_list) == 0:
+            print("Batch file empty - nothing to do!")
+            return
+
         for format in self.export_formats:
             format_output_path = pathlib.Path(self.output_dir,
                                               format)
@@ -58,34 +62,36 @@ class MusescoreBatchJobCreator:
     def create_batch_from_file_list(self, files: List[str], input_dir: str, output_dir: str, export_formats: List[str]) -> MusescoreBatchJob:
 
         if len(files) == 0:
-            print("Input files length of 0")
-            return None
+            print("Note - Input files length of 0")
 
         p = pathlib.Path(input_dir)
 
         batch_job_json = []
         output_file_dir_list = []
+        jsonString = ""
+        if files:
 
-        print(files)
+            print(files)
 
-        for filename in files:
-            batch = {}
+            for filename in files:
+                batch = {}
 
-            batch['in'] = filename
+                batch['in'] = filename
 
-            output_filepath = pathlib.Path(filename).relative_to(p)
-            output_file_dir_list.append(output_filepath.parent)
+                output_filepath = pathlib.Path(filename).relative_to(p)
+                output_file_dir_list.append(output_filepath.parent)
 
-            batch['out'] = []
+                batch['out'] = []
 
-            for format in export_formats:
-                output_format = str(pathlib.Path(
-                    output_dir, format, str(output_filepath.with_suffix("")) + "." + format))
-                batch['out'].append(output_format)
+                for format in export_formats:
+                    output_format = str(pathlib.Path(
+                        output_dir, format, str(output_filepath.with_suffix("")) + "." + format))
+                    batch['out'].append(output_format)
 
-            batch_job_json.append(batch)
+                batch_job_json.append(batch)
 
-        jsonString = json.dumps(batch_job_json, indent=4)
+            jsonString = json.dumps(batch_job_json, indent=4)
+
         job = MusescoreBatchJob(output_file_dir_list,
                                 export_formats, jsonString, output_dir)
         return job
@@ -100,6 +106,8 @@ class MusescoreBatchJobCreator:
         return self.create_batch_from_file_list(file_name_list, input_dir, output_dir, export_formats)
 
     def create_batch_from_hash_database(self, hash_db, input_dir, output_dir, export_formats):
+        print("Examining Hash Database for changes...")
         file_paths = hash_db.get_hash_diff_list()
-
+        print("Detected {} out-of-date hashes.".format(len(file_paths)))
+        print("Files to batch: " + str(file_paths))
         return self.create_batch_from_file_list(file_paths, input_dir, output_dir, export_formats)

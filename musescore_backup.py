@@ -28,12 +28,15 @@ if __name__ == '__main__':
     database.initialize_hash_database(
         configuration.decoded_object.InputDirectory)
 
-    creator = MusescoreBatchJobCreator(database)
+    creator = MusescoreBatchJobCreator()
 
-    batch_job = creator.create_batch_from_directory(configuration.decoded_object.InputDirectory,
-                                                    configuration.decoded_object.OutputDirectory,
-                                                    configuration.decoded_object.ExportFormats)
+    batch_job = creator.create_batch_from_hash_database(database,
+                                                        configuration.decoded_object.InputDirectory,
+                                                        configuration.decoded_object.OutputDirectory,
+                                                        configuration.decoded_object.ExportFormats)
 
     interface = MusescoreReal(
         configuration.decoded_object.MuseScoreInstallDirectory)
     batch_job.process(interface)
+
+    database.update_hash_database()
